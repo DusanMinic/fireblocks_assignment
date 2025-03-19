@@ -95,6 +95,26 @@ function evaluateFormula(formula: string, cells: ReactiveCell[]): number {
     return evaluateExpression(replaced);
 }
 
+// recursively updates the value of computed cells
+function updateCells(cells: ReactiveCell[]): void {
+    let updated = false;
+
+    for (const cell of cells) {
+        if (cell.type === 'computed') {
+            const newValue = evaluateFormula(cell.formula, cells);
+            if (newValue !== cell.value) {
+                cell.value = newValue;
+                updated = true;
+            }
+        }
+    }
+
+    // If any cell was updated, we need to recompute all cells
+    if (updated) {
+        updateCells(cells);
+    }
+}
+
 // Prints all cell values
 function printCells(cells: ReactiveCell[]): void {
     const state = cells.map((cell, index) => `[${index}: ${cell.value}]`).join(', ');
@@ -106,11 +126,7 @@ const testInput = '2, 18, =2*{0}, 9, ={2}+1*5';
 
 const cells = parseCells(testInput);
 
-cells.forEach((cell, index) => {
-    if (cell.type === 'computed') {
-        cell.value = evaluateFormula(cell.formula, cells);
-    }
-});
+updateCells(cells);
 
 console.log('Test Cells:');
 printCells(cells);
