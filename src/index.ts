@@ -95,6 +95,12 @@ function evaluateFormula(formula: string, cells: ReactiveCell[]): number {
     return evaluateExpression(replaced);
 }
 
+// Prints all cell values
+function printCells(cells: ReactiveCell[]): void {
+    const state = cells.map((cell, index) => `[${index}: ${cell.value}]`).join(', ');
+    console.log(state);
+}
+
 // Small test:
 const testInput = '2, 18, =2*{0}, 9, ={2}+1*5';
 
@@ -107,6 +113,4 @@ cells.forEach((cell, index) => {
 });
 
 console.log('Test Cells:');
-cells.forEach((cell, index) => {
-    console.log(`[${index}: ${cell.value}]`);
-});
+printCells(cells);
