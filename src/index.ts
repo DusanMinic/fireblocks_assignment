@@ -135,23 +135,25 @@ function prompt(): void {
         'a. Print current state\n' +
         'b. Change value (usage: b <cell index> <new value>)\n',
         (answer) => {
-            console.log(`Hello ${answer}`);
-            prompt();
-            // rl.close();
+            const trimmedAnswer = answer.trim();
+            const isPrintCommand = trimmedAnswer === 'a';
+            const isChangeCommand = trimmedAnswer.startsWith('b');
+
+            if (isPrintCommand) {
+                updateCells(cells);
+                printCells(cells);
+                prompt();
+            } else if (isChangeCommand) {
+                // TODO: Implement change command
+            } else {
+                console.error('Invalid command.');
+            }
         }
     );
 }
 
+// This is the main entry point of the program
+const testInput = readFileSync(filePath, 'utf-8');
+const cells = parseCells(testInput);
 
 prompt();
-
-
-// *********** Small test: ***********
-// const testInput = readFileSync(filePath, 'utf-8');
-
-// const cells = parseCells(testInput);
-
-// updateCells(cells);
-
-// console.log('Test Cells:');
-// printCells(cells);
