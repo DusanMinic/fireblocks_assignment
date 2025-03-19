@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 const filePath = process.argv[2];
 if (!filePath) {
     console.error('Please provide an input file as argument.');
@@ -122,7 +124,7 @@ function printCells(cells: ReactiveCell[]): void {
 }
 
 // Small test:
-const testInput = '2, 18, =2*{0}, 9, ={2}+1*5';
+const testInput = readFileSync(filePath, 'utf-8');
 
 const cells = parseCells(testInput);
 
