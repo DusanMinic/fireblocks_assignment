@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node dist/index.js input.txt"
+    "start": "tsc && node dist/index.js"
   },
   "keywords": [],
   "author": "",

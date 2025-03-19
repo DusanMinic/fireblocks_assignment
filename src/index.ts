@@ -3,7 +3,7 @@ import { createInterface } from 'node:readline';
 
 const filePath = process.argv[2];
 if (!filePath) {
-    console.error('Please provide an input file as argument.');
+    console.error('Error: Please provide an input file as an argument.');
     process.exit(1);
 }
 
@@ -133,7 +133,7 @@ const rl = createInterface({
 function prompt(): void {
     rl.question('\nMenu:\n' +
         'a. Print current state\n' +
-        'b. Change value (usage: b <cell index> <new value>)\n',
+        'b. Change value (usage: b <cell index> <new value>)\n\n',
         (answer) => {
             const trimmedAnswer = answer.trim();
             const isPrintCommand = trimmedAnswer === 'a';
@@ -144,9 +144,26 @@ function prompt(): void {
                 printCells(cells);
                 prompt();
             } else if (isChangeCommand) {
-                // TODO: Implement change command
+                const changeAnswerValues = trimmedAnswer.split(' ');
+                const cellIndex = parseInt(changeAnswerValues[1], 10);
+                const newValue = parseInt(changeAnswerValues[2], 10);
+
+                const isIndexInRange = cellIndex >= 0 && cellIndex < cells.length;
+                const isValidNumbers = !isNaN(newValue) && !isNaN(cellIndex);
+                const isValidCommand = isIndexInRange && isValidNumbers;
+
+                if (!isValidCommand) {
+                    console.error('Invalid command. Try again.');
+                    prompt();
+                } else {
+                    cells[cellIndex].value = newValue;
+                    updateCells(cells);
+                    printCells(cells);
+                    prompt();
+                }
             } else {
-                console.error('Invalid command.');
+                console.error('\nCommand does not exist. You can only use "a" or "b".\n');
+                prompt();
             }
         }
     );
