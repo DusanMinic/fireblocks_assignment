@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { readFileSync } from 'node:fs';
+import { createInterface } from 'node:readline';
 
 const filePath = process.argv[2];
 if (!filePath) {
@@ -123,12 +124,34 @@ function printCells(cells: ReactiveCell[]): void {
     console.log(state);
 }
 
-// Small test:
-const testInput = readFileSync(filePath, 'utf-8');
+// Create readline interface for interactive console input.
+const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
-const cells = parseCells(testInput);
+function prompt(): void {
+    rl.question('\nMenu:\n' +
+        'a. Print current state\n' +
+        'b. Change value (usage: b <cell index> <new value>)\n',
+        (answer) => {
+            console.log(`Hello ${answer}`);
+            prompt();
+            // rl.close();
+        }
+    );
+}
 
-updateCells(cells);
 
-console.log('Test Cells:');
-printCells(cells);
+prompt();
+
+
+// *********** Small test: ***********
+// const testInput = readFileSync(filePath, 'utf-8');
+
+// const cells = parseCells(testInput);
+
+// updateCells(cells);
+
+// console.log('Test Cells:');
+// printCells(cells);
